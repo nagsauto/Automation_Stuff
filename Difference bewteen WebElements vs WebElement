@@ -1,0 +1,92 @@
+package selenium_recording;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class WebElementvsWebElements {
+	public static WebDriver driver = null;
+
+	@BeforeClass
+	public void start() {
+		System.setProperty("webdriver.chrome.driver", "C:\\Python27\\Scripts\\chromedriver.exe");
+
+		ChromeOptions options = new ChromeOptions();
+
+		driver = new ChromeDriver(options);
+		driver.manage().window().maximize();
+		driver.get("https://money.rediff.com/gainers/bse/daily/groupa?src=gain_lose");
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+	}
+
+	@Test
+	public void findElementExample() {
+		// .dataTable a
+		highlight(driver.findElement(By.cssSelector(".dataTable a")), "yellow");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@Test
+	public void findelementsExample() {
+		List<WebElement> elements = driver.findElements(By.cssSelector(".dataTable a"));
+		/*
+		 * for (WebElement Elements : elements) { if (Elements.isDisplayed()) {
+		 * highlight(Elements, "LightGreen"); }
+		 * 
+		 * }
+		 */
+	}
+
+	@Test
+	public void test1() {
+		try {
+			driver.findElement(By.cssSelector(".dataTable a2"));
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println("findelement exp:" + e);
+		}
+
+		driver.findElements(By.cssSelector(".dataTable a2"));
+		System.out.println("findelements no exp");
+
+	}
+
+	@AfterClass
+	public void end() {
+		driver.close();
+
+	}
+
+	public static void highlight(WebElement ele, String color) {
+		String boarderColor = "red";
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		if (!color.equalsIgnoreCase("yellow")) {
+			boarderColor = "Black";
+		}
+		js.executeScript("arguments[0].setAttribute('style', 'background:" + color + "; border: 2px solid "
+				+ boarderColor + ";');", ele);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}
